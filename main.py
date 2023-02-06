@@ -7,14 +7,15 @@ from io import StringIO
 import os
 import matplotlib.dates as mdates
 from fastapi import FastAPI
-# from deta import App
+from deta import App
 import matplotlib.ticker as mticker
 import numpy as np
 import re
 
-
 months=['', 'ene', 'feb', 'mar', 'abr', 'may', 'jun',
         'jul', 'ago', 'sept', 'oct', 'nov', 'dic']
+
+app = App(FastAPI())
 
 def start_client():
     access_token = os.getenv('access_token')
@@ -276,12 +277,16 @@ def proc_mentions(mastodon):
     print(f"Connected as {client_id} {username}")
     notifications = mastodon.notifications(types=['mention'])
     for notification in notifications:
-        # print('----------------------')
-        # print(f'{notification.id} {content}')
-        # mastodon.status_post('Hi!', 
-            # in_reply_to_id=notification.status.id)
-        # mastodon.notifications_dismiss(notification.id)
         proc_mention(mastodon, notification)
 
-mastodon = start_client()
-proc_mentions(mastodon)
+@app.get("/")
+async def root():
+    mastodon = start_client()
+    proc_mentions(mastodon)
+    return "ok"
+
+@app.lib.cron()
+def cron_job(event):
+    mastodon = start_client()
+    proc_mentions(mastodon)
+    return "ok"
