@@ -2,3 +2,5 @@ Mastodon.py
 pandas
 matplotlib
 fastapi
+deta
+

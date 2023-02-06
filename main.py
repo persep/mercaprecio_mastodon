@@ -259,7 +259,7 @@ def proc_mention(mastodon, notification):
                 return
 
         media = mastodon.media_post("/tmp/chart.png")
-        message = "Aquí tienes el gráfico"
+        message = f"@{notification.account.acct}, aquí tienes el gráfico"
         print("sending tweet w chart")
         mastodon.status_post(message, in_reply_to_id=notification.status.id, media_ids=media.id)
         mastodon.notifications_dismiss(notification.id)
