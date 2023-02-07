@@ -179,13 +179,13 @@ def plotting2(data):
     last_day = data.index[-1].strftime("%d-%m-%Y")
 
     ax.text(x=0.07, y=0.88, 
-            s=f"Precio a {str(last_day)}", 
+            s=f"Precio a {str(last_day)} de {prices.iloc[-1]}€", 
             transform=fig.transFigure, 
             ha='left', 
             fontsize=14)
      
     ax.text(x=0.07, y=0.015, 
-            s=f"@Merca_precio", 
+            s=f"@mercaprecio@botsin.space ", 
             transform=fig.transFigure, 
             ha='left', 
             fontsize=14,
@@ -266,8 +266,8 @@ def proc_mention(mastodon, notification):
     else:
         message = 'No es una url válida'
         print("sending tweet Not valid url")
-        mastodon.status_post(message, in_reply_to_id=notification.status.id)
-        mastodon.notifications_dismiss(notification.id)
+        # mastodon.status_post(message, in_reply_to_id=notification.status.id)
+        # mastodon.notifications_dismiss(notification.id)
 
 def proc_mentions(mastodon):
     me = mastodon.me()
