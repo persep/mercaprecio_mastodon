@@ -267,7 +267,7 @@ def proc_mention(mastodon, notification):
         message = 'No es una url válida'
         print("sending tweet Not valid url")
         # mastodon.status_post(message, in_reply_to_id=notification.status.id)
-        # mastodon.notifications_dismiss(notification.id)
+        mastodon.notifications_dismiss(notification.id)
 
 def proc_mentions(mastodon):
     me = mastodon.me()
