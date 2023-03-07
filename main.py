@@ -6,8 +6,7 @@ import requests
 from io import StringIO
 import os
 import matplotlib.dates as mdates
-from fastapi import FastAPI
-from deta import App
+from fastapi import Request, FastAPI
 import matplotlib.ticker as mticker
 import numpy as np
 import re
@@ -15,7 +14,7 @@ import re
 months=['', 'ene', 'feb', 'mar', 'abr', 'may', 'jun',
         'jul', 'ago', 'sept', 'oct', 'nov', 'dic']
 
-app = App(FastAPI())
+app = FastAPI()
 
 def start_client():
     access_token = os.getenv('access_token')
@@ -281,12 +280,16 @@ def proc_mentions(mastodon):
 
 @app.get("/")
 async def root():
+    print("In main")
     mastodon = start_client()
     proc_mentions(mastodon)
     return "ok"
 
-@app.lib.cron()
-def cron_job(event):
-    mastodon = start_client()
-    proc_mentions(mastodon)
-    return "ok"
+@app.post('/__space/v0/actions')
+async def actions(request: Request):
+    data = await request.json()
+    event = data['event']
+    if event['id'] == 'cron':
+        print("Login to mastodon")
+        mastodon = start_client()
+        proc_mentions(mastodon)

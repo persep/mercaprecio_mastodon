@@ -1,0 +1,17 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: mercaprecio_mastodon
+    src: .
+    engine: python3.9
+    primary: true
+    presets:
+      env:
+        - name: tb_by_url
+        - name: tb_by_basename
+        - name: access_token
+    actions:
+      - id: "cron"
+        name: "cron"
+        trigger: "schedule"
+        default_interval: "1 minute"
